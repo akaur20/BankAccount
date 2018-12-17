@@ -24,11 +24,19 @@ public abstract class BankAccount
 	
 	public void deposit(double amt)
 	{
+		if(amt < 0)
+		{
+			throw (new IllegalArgumentException());
+		}
 		balance += amt;
 	}
 	
 	public void withdraw(double amt)
 	{
+		if(amt < 0)
+		{
+			throw (new IllegalArgumentException());
+		}
 		balance -= amt;
 	}
 	

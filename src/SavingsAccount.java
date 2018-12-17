@@ -20,10 +20,56 @@ public class SavingsAccount extends BankAccount
 		MIN_BAL = mb;
 		MIN_BAL_FEE = mbf;
 	}
+	
+	public void withdraw(double amt)
+	{
+		if(amt > 0)
+		{
+			if(getBalance() - amt < MIN_BAL)
+			{
+				if(getBalance() - amt >= 0 )
+				{
+					super.withdraw(amt);
+					super.withdraw(MIN_BAL_FEE);
+					return;
+				}
 
+			}
+			else
+			{
+				super.withdraw(amt);
+				return;
+			}
+		}
+			
+		throw (new IllegalArgumentException());
+
+	}
+	
+	public void transfer(BankAccount other, double amt)
+	{
+		if(getBalance() - amt  > 0)
+		{
+			if(getName().equals(other.getName()))
+			{
+				this.withdraw(amt);
+				other.deposit(amt);
+				return;
+			}
+
+		}
+		throw (new IllegalArgumentException());
+
+	}
+	
+	public void addInterest()
+	{
+		super.deposit(intRate * getBalance());
+	}
+	
 	public void endOfMonthUpdate() 
 	{
-		
+		addInterest();
 	}
 
 }

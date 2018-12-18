@@ -50,6 +50,11 @@ public abstract class BankAccount
 		return balance;
 	}
 	
+	public int getAccountNumber()
+	{
+		return accNum;
+	}
+	
 	public abstract void endOfMonthUpdate();
 	
 	public void transfer(BankAccount other, double amt)

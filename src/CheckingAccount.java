@@ -2,9 +2,9 @@
 public class CheckingAccount extends BankAccount
 {
 	
-	private double OVER_DRAFT_FEE;
-	private double TRANSACTION_FEE;	
-	private int FREE_TRANS;
+	private final double OVER_DRAFT_FEE;
+	private final double TRANSACTION_FEE;	
+	private final int FREE_TRANS;
 	private int numTransactions;
 	
 	public CheckingAccount(String n, double b, double odf, double tf, int freeTrans) 

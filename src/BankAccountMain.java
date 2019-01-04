@@ -3,6 +3,19 @@ import java.util.Scanner;
 
 public class BankAccountMain 
 {
+	private static boolean isNumeric(String str)
+	{
+		try
+		{
+			Double.parseDouble(str);
+			return true;
+		}
+		catch(IllegalArgumentException e)
+		{
+					return false;
+		}
+	}
+
 	
 	public static void main(String[] args) 
 	{
@@ -19,107 +32,132 @@ public class BankAccountMain
 
 		System.out.println("Welcome to our bank. Would you like to add an account, make a transaction, or terminate program.");
 		String userWant = (in.nextLine()).toLowerCase();
-		
-		while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
+		boolean cont = true;
+		while(cont)
 		{
-			System.out.println("Would you like to add an account, make a transaction, or terminate program.");
-			userWant = (in.nextLine()).toLowerCase();
-		}
-		
-		
-		if (userWant.equals("add an account"))
-		{
-			System.out.println("Would you like to create a checking or savings account?");
-			String checkOrSave = (in.nextLine()).toLowerCase();
-			while (!checkOrSave.equals("checking") && !checkOrSave.equals("savings"))
+			while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
+			{
+				System.out.println("Would you like to add an account, make a transaction, or terminate program.");
+				userWant = (in.nextLine()).toLowerCase();
+			}
+			
+			
+			if (userWant.equals("add an account"))
 			{
 				System.out.println("Would you like to create a checking or savings account?");
-				checkOrSave = (in.nextLine()).toLowerCase();
-			}
-			System.out.println("What is your name?");
-			String name = (in.nextLine()).toLowerCase();
-			if (checkOrSave.equals("checking"))
-			{
-				accounts.add(new CheckingAccount(name, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS));
-			}
-			
-			if(checkOrSave.equals("savings"))
-			{
-				accounts.add(new SavingsAccount(name, RATE, MIN_BAL_FEE, MIN_BAL_FEE));
-			}
-			
-		}
-		
-		if(userWant.equals("make a transaction"))
-		{
-			System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
-			String userTransaction = (in.nextLine()).toLowerCase();
-			
-			while (!userTransaction.equals("add an account") && !userTransaction.equals("make a transaction") && !userTransaction.equals("terminate program"))
-			{
-				System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
-				userTransaction = (in.nextLine()).toLowerCase();
-			}
-			
-			System.out.println("What is your account number?");
-			int accNum = in.nextInt();
-
-			BankAccount foundAccount;
-			for (int i = 0; i < accounts.size(); i++)
-			{
-				try
+				String checkOrSave = (in.nextLine()).toLowerCase();
+				while (!checkOrSave.equals("checking") && !checkOrSave.equals("savings"))
 				{
-					if(accounts.get(i).getAccountNumber() == accNum)
-					{
-						foundAccount = accounts.get(i);
-					}
+					System.out.println("Would you like to create a checking or savings account?");
+					checkOrSave = (in.nextLine()).toLowerCase();
 				}
-				catch(IllegalArgumentException a)
-				{
-					System.out.print("transaction not authorized");
-				}
-			}
-			
-			switch (userTransaction)
-			{
-			case "withdraw": 
-			{
-				System.out.println("How much money would you like to withdraw?");
-				double withdrawalAmt = in.nextDouble();
-				foundAccount.withdraw(withdrawalAmt);
-				break;
-			}
-			case "deposit": 
-			{
-				System.out.println("How much money would you like to deposit?");
-				double depositAmt = in.nextDouble();
-				foundAccount.withdraw(depositAmt);
-				break;
-			}
-			case "transfer": 
-			{
-				
-				break;
-			}
-			case "get account numbers": 
-			{
 				System.out.println("What is your name?");
 				String name = (in.nextLine()).toLowerCase();
 				
-				for (int i = 0; i < accounts.size(); i++)
+				BankAccount account = null;
+				if (checkOrSave.equals("checking"))
 				{
-					if(accounts.get(i).getName() == name)
-					{
-						accounts.get(i).toString();
-					}
+					account = new CheckingAccount(name, OVER_DRAFT_FEE, TRANSACTION_FEE, FREE_TRANSACTIONS);
+					accounts.add(account);
+					System.out.println("Your new account number is "+account.getAccountNumber());
+				}
+				
+				if(checkOrSave.equals("savings"))
+				{
+					account = new SavingsAccount(name, RATE, MIN_BAL_FEE, MIN_BAL_FEE);
+					accounts.add(account);
+					System.out.println("Your new account number is " + account.getAccountNumber());
+				}
+				
+				
+				
+			}
+			
+			if(userWant.equals("make a transaction"))
+			{
+				if(accounts.size() == 0)
+				{
 					
 				}
-				break;
+				System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
+				String userTransaction = (in.nextLine()).toLowerCase();
+				
+				while (!userTransaction.equals("withdraw") && !userTransaction.equals("deposit") && !userTransaction.equals("get account numbers"))
+				{
+					System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
+					userTransaction = (in.nextLine()).toLowerCase();
+				}
+				
+				System.out.println("What is your account number?");
+				String accNum1 = in.next();
+				while (!isNumeric(accNum1))
+				{
+					System.out.println("What is your account number?");
+					accNum1 = in.next();
+				}
+				
+				int accNum = Integer.parseInt(accNum1);
+				BankAccount foundAccount = null;
+				for (int i = 0; i < accounts.size(); i++)
+				{
+						if(accounts.get(i).getAccountNumber() == accNum)
+						{
+							foundAccount = accounts.get(i);
+						}
+				}
+				
+				//if there is no number 
+				
+				switch (userTransaction)
+				{
+				case "withdraw": 
+				{
+					System.out.println("How much money would you like to withdraw?");
+					double withdrawalAmt = in.nextDouble();
+					foundAccount.withdraw(withdrawalAmt);
+					break;
+				}
+				case "deposit": 
+				{
+					System.out.println("How much money would you like to deposit?");
+					double depositAmt = in.nextDouble();
+					foundAccount.withdraw(depositAmt);
+					break;
+				}
+				case "transfer": 
+				{
+					
+					break;
+				}
+				case "get account numbers": 
+				{
+					System.out.println("What is your name?");
+					String name = (in.nextLine()).toLowerCase();
+					
+					for (int i = 0; i < accounts.size(); i++)
+					{
+						if(accounts.get(i).getName() == name)
+						{
+							accounts.get(i).toString();
+						}
+						
+					}
+					break;
+				}
+				}
 			}
+			System.out.println("Would you like to add an account, make a transaction, or terminate program.");
+			userWant = (in.nextLine()).toLowerCase();
+			while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
+			{
+				System.out.println("Would you like to add an account, make a transaction, or terminate program.");
+				userWant = (in.nextLine()).toLowerCase();
 			}
-		}
-		
-		
+			if(userWant.equals("terminate program"))
+			{
+				cont = false;
+			}
+		}	
 
 		System.out.print("Thank you for visiting our bank");
 		

@@ -70,80 +70,111 @@ public class BankAccountMain
 				}
 				
 				
-				
 			}
 			
 			if(userWant.equals("make a transaction"))
 			{
 				if(accounts.size() == 0)
 				{
-					
+					System.out.println("There are no accounts in the system to make a transaction");
 				}
-				System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
-				String userTransaction = (in.nextLine()).toLowerCase();
-				
-				while (!userTransaction.equals("withdraw") && !userTransaction.equals("deposit") && !userTransaction.equals("get account numbers"))
+				else
 				{
 					System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
-					userTransaction = (in.nextLine()).toLowerCase();
-				}
-				
-				System.out.println("What is your account number?");
-				String accNum1 = in.next();
-				while (!isNumeric(accNum1))
-				{
+					String userTransaction = (in.nextLine()).toLowerCase();
+					
+					while (!userTransaction.equals("withdraw") && !userTransaction.equals("deposit") && !userTransaction.equals("get account numbers"))
+					{
+						System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
+						userTransaction = (in.nextLine()).toLowerCase();
+					}
+					
 					System.out.println("What is your account number?");
-					accNum1 = in.next();
-				}
-				
-				int accNum = Integer.parseInt(accNum1);
-				BankAccount foundAccount = null;
-				for (int i = 0; i < accounts.size(); i++)
-				{
-						if(accounts.get(i).getAccountNumber() == accNum)
-						{
-							foundAccount = accounts.get(i);
-						}
-				}
-				
-				//if there is no number 
-				
-				switch (userTransaction)
-				{
-				case "withdraw": 
-				{
-					System.out.println("How much money would you like to withdraw?");
-					double withdrawalAmt = in.nextDouble();
-					foundAccount.withdraw(withdrawalAmt);
-					break;
-				}
-				case "deposit": 
-				{
-					System.out.println("How much money would you like to deposit?");
-					double depositAmt = in.nextDouble();
-					foundAccount.withdraw(depositAmt);
-					break;
-				}
-				case "transfer": 
-				{
+					String accNum1 = in.next();
+					while (!isNumeric(accNum1))
+					{
+						System.out.println("What is your account number?");
+						accNum1 = in.next();
+					}
 					
-					break;
-				}
-				case "get account numbers": 
-				{
-					System.out.println("What is your name?");
-					String name = (in.nextLine()).toLowerCase();
-					
+					int accNum = Integer.parseInt(accNum1);
+					BankAccount foundAccount = null;
 					for (int i = 0; i < accounts.size(); i++)
 					{
-						if(accounts.get(i).getName() == name)
+							if(accounts.get(i).getAccountNumber() == accNum)
+							{
+								foundAccount = accounts.get(i);
+							}
+					}
+					
+					while (foundAccount == null)
+					{
+						System.out.println("No accounts were found with this account number. Would you like to enter another number?");
+						String userAcctWant = in.next();
+						while (!userTransaction.equals("yes") && !userTransaction.equals("no"))
 						{
-							accounts.get(i).toString();
+							System.out.println(" Would you like to enter another number?");
+							userAcctWant = (in.nextLine()).toLowerCase();
 						}
 						
+						if (userAcctWant.equals("yes"))
+						{
+							accNum1 = in.next();
+							while (!isNumeric(accNum1))
+							{
+								System.out.println("What is your account number?");
+								accNum1 = in.next();
+							}
+							
+							accNum = Integer.parseInt(accNum1);
+							foundAccount = null;
+							for (int i = 0; i < accounts.size(); i++)
+							{
+									if(accounts.get(i).getAccountNumber() == accNum)
+									{
+										foundAccount = accounts.get(i);
+									}
+							}
+						}
 					}
-					break;
-				}
+					
+					switch (userTransaction)
+					{
+					case "withdraw": 
+					{
+						System.out.println("How much money would you like to withdraw?");
+						double withdrawalAmt = in.nextDouble();
+						foundAccount.withdraw(withdrawalAmt);
+						break;
+					}
+					case "deposit": 
+					{
+						System.out.println("How much money would you like to deposit?");
+						double depositAmt = in.nextDouble();
+						foundAccount.withdraw(depositAmt);
+						break;
+					}
+					case "transfer": 
+					{
+						
+						break;
+					}
+					case "get account numbers": 
+					{
+						System.out.println("What is your name?");
+						String name = (in.nextLine()).toLowerCase();
+						
+						for (int i = 0; i < accounts.size(); i++)
+						{
+							if(accounts.get(i).getName() == name)
+							{
+								accounts.get(i).toString();
+							}
+							
+						}
+						break;
+					}
+					}
 				}
 			}
 			System.out.println("Would you like to add an account, make a transaction, or terminate program.");

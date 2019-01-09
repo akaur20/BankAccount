@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -142,22 +143,121 @@ public class BankAccountMain
 					{
 					case "withdraw": 
 					{
-						System.out.println("How much money would you like to withdraw?");
-						double withdrawalAmt = in.nextDouble();
-						foundAccount.withdraw(withdrawalAmt);
+						if(foundAccount.getBalance() >= 0)
+						{	
+							boolean wrong = true;
+							while(wrong)
+							{
+								try
+								{
+									System.out.println("How much money would you like to withdraw?");
+									double withdrawalAmt = in.nextDouble();
+									foundAccount.withdraw(withdrawalAmt);
+									wrong = false;
+								}
+								catch(IllegalArgumentException e)
+								{
+									System.out.print("transaction not authorized");	
+								}
+							}
+						
+						}
+						else
+						{
+							System.out.print("Transaction not authorized. Negative balance");	
+						}
+						
 						break;
+						
 					}
 					case "deposit": 
 					{
-						System.out.println("How much money would you like to deposit?");
-						double depositAmt = in.nextDouble();
-						foundAccount.withdraw(depositAmt);
+						boolean wrong = true;
+						while(wrong)
+						{
+							try
+							{
+								System.out.println("How much money would you like to deposit?");
+								double depositAmt = in.nextDouble();
+								foundAccount.deposit(depositAmt);
+								wrong = false;
+							}
+							catch(IllegalArgumentException e)
+							{
+								System.out.print("transaction not authorized");	
+							}
+						}
+						
 						break;
 					}
 					case "transfer": 
 					{
+						String accNum2 = in.next();
+						while (!isNumeric(accNum2))
+						{
+							System.out.println("Which account would you like to transfer to? Please enter their account number");
+							accNum2 = in.next();
+						}
 						
+						int accNum02 = Integer.parseInt(accNum2);
+						BankAccount foundAccount2 = null;
+						for (int i = 0; i < accounts.size(); i++)
+						{
+								if(accounts.get(i).getAccountNumber() == accNum02)
+								{
+									foundAccount2 = accounts.get(i);
+								}
+						}
+						
+						while (foundAccount2 == null)
+						{
+							System.out.println("No accounts were found with this account number. Would you like to enter another number?");
+							String userAcctWant = in.next();
+							while (!userTransaction.equals("yes") && !userTransaction.equals("no"))
+							{
+								System.out.println(" Would you like to enter another number?");
+								userAcctWant = (in.nextLine()).toLowerCase();
+							}
+							
+							if (userAcctWant.equals("yes"))
+							{
+								accNum2 = in.next();
+								while (!isNumeric(accNum2))
+								{
+									System.out.println("What is your account number?");
+									accNum2 = in.next();
+								}
+								
+								accNum02 = Integer.parseInt(accNum2);
+								foundAccount2 = null;
+								for (int i = 0; i < accounts.size(); i++)
+								{
+										if(accounts.get(i).getAccountNumber() == accNum)
+										{
+											foundAccount2 = accounts.get(i);
+										}
+								}
+							
+							}
+							
+							boolean wrong = true;
+							while(wrong)
+							{
+								try
+								{
+									System.out.println("How much money would you like to transfer?");
+									double transferAmt = in.nextDouble();
+									foundAccount.transfer(foundAccount2, transferAmt);
+									wrong = false;
+								}
+								catch(IllegalArgumentException e)
+								{
+									System.out.print("transaction not authorized");	
+								}
+							}
+							
 						break;
+					}
 					}
 					case "get account numbers": 
 					{
@@ -177,8 +277,10 @@ public class BankAccountMain
 					}
 				}
 			}
+			
 			System.out.println("Would you like to add an account, make a transaction, or terminate program.");
 			userWant = (in.nextLine()).toLowerCase();
+			
 			while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
 			{
 				System.out.println("Would you like to add an account, make a transaction, or terminate program.");

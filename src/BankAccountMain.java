@@ -16,6 +16,15 @@ public class BankAccountMain
 					return false;
 		}
 	}
+	
+	private static boolean isInt(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch(IllegalArgumentException e) {
+			return false;
+		}
+	}
 
 	
 	public static void main(String[] args) 
@@ -91,11 +100,11 @@ public class BankAccountMain
 					}
 					
 					System.out.println("What is your account number?");
-					String accNum1 = in.next();
-					while (!isNumeric(accNum1))
+					String accNum1 = in.nextLine();
+					while (!isInt(accNum1))
 					{
 						System.out.println("What is your account number?");
-						accNum1 = in.next();
+						accNum1 = in.nextLine();
 					}
 					
 					int accNum = Integer.parseInt(accNum1);
@@ -111,8 +120,8 @@ public class BankAccountMain
 					while (foundAccount == null)
 					{
 						System.out.println("No accounts were found with this account number. Would you like to enter another number?");
-						String userAcctWant = in.next();
-						while (!userTransaction.equals("yes") && !userTransaction.equals("no"))
+						String userAcctWant = in.nextLine();
+						while (!userAcctWant.equals("yes") && !userAcctWant.equals("no"))
 						{
 							System.out.println(" Would you like to enter another number?");
 							userAcctWant = (in.nextLine()).toLowerCase();
@@ -120,11 +129,11 @@ public class BankAccountMain
 						
 						if (userAcctWant.equals("yes"))
 						{
-							accNum1 = in.next();
-							while (!isNumeric(accNum1))
+							accNum1 = in.nextLine();
+							while (!isInt(accNum1))
 							{
 								System.out.println("What is your account number?");
-								accNum1 = in.next();
+								accNum1 = in.nextLine();
 							}
 							
 							accNum = Integer.parseInt(accNum1);
@@ -151,8 +160,14 @@ public class BankAccountMain
 								try
 								{
 									System.out.println("How much money would you like to withdraw?");
-									double withdrawalAmt = in.nextDouble();
-									foundAccount.withdraw(withdrawalAmt);
+									String withdrawalAmt;
+									withdrawalAmt = in.nextLine();
+									while (!isNumeric(withdrawalAmt))
+									{
+										System.out.println("How much money would you like to withdraw?");
+										withdrawalAmt = in.nextLine();
+									}
+									foundAccount.withdraw(Double.parseDouble(withdrawalAmt));
 									wrong = false;
 								}
 								catch(IllegalArgumentException e)
@@ -178,8 +193,14 @@ public class BankAccountMain
 							try
 							{
 								System.out.println("How much money would you like to deposit?");
-								double depositAmt = in.nextDouble();
-								foundAccount.deposit(depositAmt);
+								String depositAmt;
+								depositAmt = in.nextLine();
+								while (!isNumeric(depositAmt))
+								{
+									System.out.println("How much money would you like to deposit?");
+									depositAmt = in.nextLine();
+								}
+								foundAccount.deposit(Double.parseDouble(depositAmt));
 								wrong = false;
 							}
 							catch(IllegalArgumentException e)
@@ -192,11 +213,11 @@ public class BankAccountMain
 					}
 					case "transfer": 
 					{
-						String accNum2 = in.next();
-						while (!isNumeric(accNum2))
+						String accNum2 = in.nextLine();
+						while (!isInt(accNum2))
 						{
 							System.out.println("Which account would you like to transfer to? Please enter their account number");
-							accNum2 = in.next();
+							accNum2 = in.nextLine();
 						}
 						
 						int accNum02 = Integer.parseInt(accNum2);
@@ -212,7 +233,7 @@ public class BankAccountMain
 						while (foundAccount2 == null)
 						{
 							System.out.println("No accounts were found with this account number. Would you like to enter another number?");
-							String userAcctWant = in.next();
+							String userAcctWant = in.nextLine();
 							while (!userTransaction.equals("yes") && !userTransaction.equals("no"))
 							{
 								System.out.println(" Would you like to enter another number?");
@@ -221,11 +242,11 @@ public class BankAccountMain
 							
 							if (userAcctWant.equals("yes"))
 							{
-								accNum2 = in.next();
-								while (!isNumeric(accNum2))
+								accNum2 = in.nextLine();
+								while (!isInt(accNum2))
 								{
 									System.out.println("What is your account number?");
-									accNum2 = in.next();
+									accNum2 = in.nextLine();
 								}
 								
 								accNum02 = Integer.parseInt(accNum2);
@@ -246,8 +267,14 @@ public class BankAccountMain
 								try
 								{
 									System.out.println("How much money would you like to transfer?");
-									double transferAmt = in.nextDouble();
-									foundAccount.transfer(foundAccount2, transferAmt);
+									String transferAmt;
+									transferAmt = in.nextLine();
+									while (!isNumeric(transferAmt))
+									{
+										System.out.println("How much money would you like to transfer?");
+										transferAmt = in.nextLine();
+									}
+									foundAccount.transfer(foundAccount2, Double.parseDouble(transferAmt));
 									wrong = false;
 								}
 								catch(IllegalArgumentException e)
@@ -278,12 +305,13 @@ public class BankAccountMain
 				}
 			}
 			
-			System.out.println("Would you like to add an account, make a transaction, or terminate program.");
+			
+			System.out.println("1Would you like to add an account, make a transaction, or terminate program.");
 			userWant = (in.nextLine()).toLowerCase();
 			
 			while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
 			{
-				System.out.println("Would you like to add an account, make a transaction, or terminate program.");
+				System.out.println("2Would you like to add an account, make a transaction, or terminate program.");
 				userWant = (in.nextLine()).toLowerCase();
 			}
 			if(userWant.equals("terminate program"))

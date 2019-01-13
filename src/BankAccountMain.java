@@ -1,9 +1,18 @@
+/**
+ * @author Avleen Kaur
+ * Period 7
+ */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BankAccountMain 
 {
+	/**
+	 * Helps check whether the input value is a double
+	 * @param str string input
+	 * @return true or false depending on whether a double or not
+	 */
 	private static boolean isNumeric(String str)
 	{
 		try
@@ -17,11 +26,19 @@ public class BankAccountMain
 		}
 	}
 	
-	private static boolean isInt(String str) {
-		try {
+	/**
+	 * Helps check whether the input value is an integer
+	 * @param str string input
+	 * @return true or false depending on whether an integer or not
+	 */
+	private static boolean isInt(String str) 
+	{
+		try 
+		{
 			Integer.parseInt(str);
 			return true;
-		} catch(IllegalArgumentException e) {
+		} catch(IllegalArgumentException e) 
+		{
 			return false;
 		}
 	}
@@ -93,57 +110,63 @@ public class BankAccountMain
 					System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
 					String userTransaction = (in.nextLine()).toLowerCase();
 					
-					while (!userTransaction.equals("withdraw") && !userTransaction.equals("deposit") && !userTransaction.equals("get account numbers"))
+					while (!userTransaction.equals("withdraw") && !userTransaction.equals("deposit") && !userTransaction.equals("transfer") && !userTransaction.equals("get account numbers") )
 					{
 						System.out.println("Would you like to withdraw, deposit, transfer, or get account numbers?");
 						userTransaction = (in.nextLine()).toLowerCase();
 					}
 					
-					System.out.println("What is your account number?");
-					String accNum1 = in.nextLine();
-					while (!isInt(accNum1))
+					BankAccount foundAccount = null;
+					int accNum = -1;
+					
+					if(userTransaction.equals("withdraw") || userTransaction.equals("deposit") || userTransaction.equals("transfer"))
 					{
 						System.out.println("What is your account number?");
-						accNum1 = in.nextLine();
-					}
-					
-					int accNum = Integer.parseInt(accNum1);
-					BankAccount foundAccount = null;
-					for (int i = 0; i < accounts.size(); i++)
-					{
-							if(accounts.get(i).getAccountNumber() == accNum)
-							{
-								foundAccount = accounts.get(i);
-							}
-					}
-					
-					while (foundAccount == null)
-					{
-						System.out.println("No accounts were found with this account number. Would you like to enter another number?");
-						String userAcctWant = in.nextLine();
-						while (!userAcctWant.equals("yes") && !userAcctWant.equals("no"))
+						String accNum1 = in.nextLine();
+						while (!isInt(accNum1))
 						{
-							System.out.println(" Would you like to enter another number?");
-							userAcctWant = (in.nextLine()).toLowerCase();
+							System.out.println("What is your account number?");
+							accNum1 = in.nextLine();
 						}
 						
-						if (userAcctWant.equals("yes"))
+						accNum = Integer.parseInt(accNum1);
+						
+						for (int i = 0; i < accounts.size(); i++)
 						{
-							accNum1 = in.nextLine();
-							while (!isInt(accNum1))
+								if(accounts.get(i).getAccountNumber() == accNum)
+								{
+									foundAccount = accounts.get(i);
+								}
+						}
+						
+						while (foundAccount == null)
+						{
+							System.out.println("No accounts were found with this account number. Would you like to enter another number?");
+							String userAcctWant = in.nextLine();
+							while (!userAcctWant.equals("yes") && !userAcctWant.equals("no"))
 							{
-								System.out.println("What is your account number?");
-								accNum1 = in.nextLine();
+								System.out.println(" Would you like to enter another number?");
+								userAcctWant = (in.nextLine()).toLowerCase();
 							}
 							
-							accNum = Integer.parseInt(accNum1);
-							foundAccount = null;
-							for (int i = 0; i < accounts.size(); i++)
+							if (userAcctWant.equals("yes"))
 							{
-									if(accounts.get(i).getAccountNumber() == accNum)
-									{
-										foundAccount = accounts.get(i);
-									}
+								accNum1 = in.nextLine();
+								while (!isInt(accNum1))
+								{
+									System.out.println("What is your account number?");
+									accNum1 = in.nextLine();
+								}
+								
+								accNum = Integer.parseInt(accNum1);
+								foundAccount = null;
+								for (int i = 0; i < accounts.size(); i++)
+								{
+										if(accounts.get(i).getAccountNumber() == accNum)
+										{
+											foundAccount = accounts.get(i);
+										}
+								}
 							}
 						}
 					}
@@ -172,14 +195,25 @@ public class BankAccountMain
 								}
 								catch(IllegalArgumentException e)
 								{
-									System.out.print("transaction not authorized");	
+									System.out.println("transaction not authorized. ");	
+									System.out.println("Would you like to end your transaction?");
+									String userAnswer = in.nextLine();
+									while (userAnswer.equals("yes") && userAnswer.equals("no"))
+									{
+										System.out.println("Would you like to end your transaction?");
+										userAnswer = in.nextLine();
+									}
+									if (userAnswer.equals("yes"))
+									{
+										wrong = false;
+									}
 								}
 							}
 						
 						}
 						else
 						{
-							System.out.print("Transaction not authorized. Negative balance");	
+							System.out.print("Transaction not authorized. Negative balance. ");	
 						}
 						
 						break;
@@ -205,7 +239,7 @@ public class BankAccountMain
 							}
 							catch(IllegalArgumentException e)
 							{
-								System.out.print("transaction not authorized");	
+								System.out.print("transaction not authorized. ");	
 							}
 						}
 						
@@ -213,92 +247,125 @@ public class BankAccountMain
 					}
 					case "transfer": 
 					{
-						String accNum2 = in.nextLine();
-						while (!isInt(accNum2))
+						
+						if (accounts.size() > 1)
 						{
 							System.out.println("Which account would you like to transfer to? Please enter their account number");
-							accNum2 = in.nextLine();
-						}
-						
-						int accNum02 = Integer.parseInt(accNum2);
-						BankAccount foundAccount2 = null;
-						for (int i = 0; i < accounts.size(); i++)
-						{
-								if(accounts.get(i).getAccountNumber() == accNum02)
-								{
-									foundAccount2 = accounts.get(i);
-								}
-						}
-						
-						while (foundAccount2 == null)
-						{
-							System.out.println("No accounts were found with this account number. Would you like to enter another number?");
-							String userAcctWant = in.nextLine();
-							while (!userTransaction.equals("yes") && !userTransaction.equals("no"))
+							String accNum2 = in.nextLine();
+							
+							while (!isInt(accNum2))
 							{
-								System.out.println(" Would you like to enter another number?");
-								userAcctWant = (in.nextLine()).toLowerCase();
+								System.out.println("Which account would you like to transfer to? Please enter their account number");
+								accNum2 = in.nextLine();
 							}
 							
-							if (userAcctWant.equals("yes"))
+							int accNum02 = Integer.parseInt(accNum2);
+							BankAccount foundAccount2 = null;
+							for (int i = 0; i < accounts.size(); i++)
 							{
-								accNum2 = in.nextLine();
-								while (!isInt(accNum2))
+									if(accounts.get(i).getAccountNumber() == accNum02)
+									{
+										foundAccount2 = accounts.get(i);
+									}
+							}
+							
+							while (foundAccount2 == null)
+							{
+								System.out.println("No accounts were found with this account number. Would you like to enter another number?");
+								String userAcctWant = in.nextLine();
+								while (!userAcctWant.equals("yes") && !userAcctWant.equals("no"))
 								{
-									System.out.println("What is your account number?");
-									accNum2 = in.nextLine();
+									System.out.println(" Would you like to enter another number?");
+									userAcctWant = (in.nextLine()).toLowerCase();
 								}
 								
-								accNum02 = Integer.parseInt(accNum2);
-								foundAccount2 = null;
-								for (int i = 0; i < accounts.size(); i++)
+								if (userAcctWant.equals("yes"))
 								{
-										if(accounts.get(i).getAccountNumber() == accNum)
-										{
-											foundAccount2 = accounts.get(i);
-										}
+									accNum2 = in.nextLine();
+									while (!isInt(accNum2))
+									{
+										System.out.println("What is account number you want to transfer to?");
+										accNum2 = in.nextLine();
+									}
+									
+									accNum02 = Integer.parseInt(accNum2);
+									foundAccount2 = null;
+									for (int i = 0; i < accounts.size(); i++)
+									{
+											if(accounts.get(i).getAccountNumber() == accNum)
+											{
+												foundAccount2 = accounts.get(i);
+											}
+									}
+								
 								}
-							
 							}
-							
-							boolean wrong = true;
-							while(wrong)
-							{
-								try
+								
+								boolean wrong = true;
+								while(wrong)
 								{
-									System.out.println("How much money would you like to transfer?");
-									String transferAmt;
-									transferAmt = in.nextLine();
-									while (!isNumeric(transferAmt))
+									try
 									{
 										System.out.println("How much money would you like to transfer?");
+										String transferAmt;
 										transferAmt = in.nextLine();
+										while (!isNumeric(transferAmt))
+										{
+											System.out.println("How much money would you like to transfer?");
+											transferAmt = in.nextLine();
+										}
+										foundAccount.transfer(foundAccount2, Double.parseDouble(transferAmt));
+										wrong = false;
 									}
-									foundAccount.transfer(foundAccount2, Double.parseDouble(transferAmt));
-									wrong = false;
+									catch(IllegalArgumentException e)
+									{
+										System.out.print("transaction not authorized. ");	
+										System.out.println("Would you like to end your transaction?");
+										String userAnswer = in.nextLine();
+										while (userAnswer.equals("yes") && userAnswer.equals("no"))
+										{
+											System.out.println("Would you like to end your transaction?");
+											userAnswer = in.nextLine();
+										}
+										if (userAnswer.equals("yes"))
+										{
+											wrong = false;
+										}
+									}
 								}
-								catch(IllegalArgumentException e)
-								{
-									System.out.print("transaction not authorized");	
-								}
-							}
+						
 							
-						break;
+						}
+					else
+					{
+						System.out.println("There are not enough accounts in the system to make a transfer. Either choose to make another account or terminate program.");
 					}
+							
+					break;
 					}
 					case "get account numbers": 
 					{
 						System.out.println("What is your name?");
 						String name = (in.nextLine()).toLowerCase();
-						
+				
 						for (int i = 0; i < accounts.size(); i++)
 						{
-							if(accounts.get(i).getName() == name)
+							if(accounts.get(i).getName().equals(name))
 							{
-								accounts.get(i).toString();
+								if (accounts.get(i) instanceof CheckingAccount)
+								{
+									System.out.println(accounts.get(i).toString() + "\t Checking Account"); 
+								}
+								
+								else if(accounts.get(i) instanceof SavingsAccount)
+								{
+									System.out.println(accounts.get(i).toString() + "\t Savings Account");
+								}
+								
 							}
 							
 						}
+						
 						break;
 					}
 					}
@@ -306,12 +373,12 @@ public class BankAccountMain
 			}
 			
 			
-			System.out.println("1Would you like to add an account, make a transaction, or terminate program.");
+			System.out.println("Would you like to add an account, make a transaction, or terminate program.");
 			userWant = (in.nextLine()).toLowerCase();
 			
 			while (!userWant.equals("add an account") && !userWant.equals("make a transaction") && !userWant.equals("terminate program"))
 			{
-				System.out.println("2Would you like to add an account, make a transaction, or terminate program.");
+				System.out.println("Would you like to add an account, make a transaction, or terminate program.");
 				userWant = (in.nextLine()).toLowerCase();
 			}
 			if(userWant.equals("terminate program"))

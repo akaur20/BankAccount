@@ -1,4 +1,7 @@
-
+/**
+ * @author Avleen Kaur
+ * Period 7
+ */
 public class CheckingAccount extends BankAccount
 {
 	
@@ -7,6 +10,14 @@ public class CheckingAccount extends BankAccount
 	private final int FREE_TRANS;
 	private int numTransactions;
 	
+	/**
+	 * 
+	 * @param n name of account holder
+	 * @param b account balance
+	 * @param odf over draft fee
+	 * @param tf transaction fee
+	 * @param freeTrans number of free transactions allowed
+	 */
 	public CheckingAccount(String n, double b, double odf, double tf, int freeTrans) 
 	{
 		super(n,b);
@@ -15,6 +26,13 @@ public class CheckingAccount extends BankAccount
 		FREE_TRANS = freeTrans;
 	}
 	
+	/**
+	 * 
+	 * @param n name of account holder
+	 * @param odf over draft fee
+	 * @param tf transaction fee
+	 * @param freeTrans number of free transactions allowed
+	 */
 	public CheckingAccount(String n, double odf, double tf, int freeTrans) 
 	{
 		super(n);
@@ -23,6 +41,11 @@ public class CheckingAccount extends BankAccount
 		FREE_TRANS = freeTrans;
 	}
 	
+	/**
+	 * It deposits the amount wanted into the account if the amount is greater than 0 
+	 * and subtracts a transaction fee if the number of free transaction allowed is exceeded
+	 * @param amt amount being deposited
+	 */
 	public void deposit(double amt)
 	{
 		if(amt <= 0)
@@ -45,6 +68,12 @@ public class CheckingAccount extends BankAccount
 		
 	}
 	
+	/**
+	 *It withdraws the amount wanted from the account if the account balance is greater than or equal to 0,
+	 *subtracts a transaction fee if the number of free transaction allowed is exceeded, and subtracts an over draft
+	 *fee if the balance after withdrawing is less than 0
+	 *@param amt amount being withdrawn 
+	 */
 	public void withdraw(double amt)
 	{
 		if(getBalance() >= 0)
@@ -65,7 +94,12 @@ public class CheckingAccount extends BankAccount
 			throw (new IllegalArgumentException());
 		}
 	}
-	
+	/**
+	 * It transfers amount wanted from one account to another if the account balance minus the transfer amount and transaction fee is 
+	 * greater than 0 and if the name of the account you want to transfer to matches the name your account has
+	 * @param other the bank account you want to transfer to
+	 * @param amt the amount you want to transfer
+	 */
 	public void transfer(BankAccount other, double amt)
 	{
 		if(getBalance() - amt - TRANSACTION_FEE > 0)
@@ -87,7 +121,9 @@ public class CheckingAccount extends BankAccount
 		
 	}
 	
-
+	/**
+	 * sets the number of transactions to 0 at the end of month
+	 */
 	public void endOfMonthUpdate() 
 	{
 		
